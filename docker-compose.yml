@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: leonardoapi
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - network
+    ports:
+      - "3000:3000"
+  
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    networks:
+      - network
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASSWORD}"
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+
+networks: 
+  network:
+    driver: bridge
