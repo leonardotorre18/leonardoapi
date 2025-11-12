@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { FindOneParams } from './dtos/find-one.dto';
 
 @Controller('users')
 export class UsersController {
@@ -12,7 +13,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findById (@Param('id') id: string) {
+  async findById (@Param() { id }: FindOneParams) {
     return {
       user: await this.usersService.findById(id)
     };

@@ -30,9 +30,13 @@ export class UsersService {
   
 
   async findById(id: string): Promise<User> {
-    const result = await this.userModel.findById(id);
-    if (!result) throw new NotFoundException();
-    return result;
+    try {
+      const result = await this.userModel.findById(id);
+      if (!result) throw new NotFoundException();
+      return result;
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
   async findAll(): Promise<User[]> {
