@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import mongoEnv from './config/mongo.env';
 import { MongoConfigService } from './db/mongo.config';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersModule } from './modules/users/users.module';
       useClass: MongoConfigService,
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
