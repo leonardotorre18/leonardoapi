@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import mongoEnv from './config/mongo.env';
+import jwtEnv from './config/jwt.env';
 import { MongoConfigService } from './db/mongo.config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -11,7 +12,10 @@ import { AuthModule } from './modules/auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [mongoEnv],
+      load: [
+        mongoEnv,
+        jwtEnv,
+      ],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
