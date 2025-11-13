@@ -40,6 +40,6 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserDocument[]> {
-    return this.userModel.find({}, { email: true, _id: true }).exec();
+    return this.userModel.find({}, { email: true, _id: true });
   }
 }

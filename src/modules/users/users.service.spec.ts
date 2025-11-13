@@ -5,7 +5,27 @@ import { User } from './schemas/users.schema';
 
 describe('UsersService', () => {
   let service: UsersService;
-  const mockUserRepository = {};
+  const mockUsers: any[] = []
+  const mockUserRepository = {
+    find: jest.fn().mockResolvedValue(mockUsers),
+    create: jest.fn().mockImplementation(user => {
+      const savedUser = {
+        ...user,
+        id: mockUsers.length
+      }
+      mockUsers.push(savedUser)
+      return savedUser
+    }),
+    findById: jest.fn().mockImplementation((id) => {
+      const result = mockUsers.find(user => user.id == id)
+      return result ?? null
+    }),
+    findOne: jest.fn().mockResolvedValue(null),
+  };
+  const userExample = {
+    email: 'example@domain.com',
+    password: '123'
+  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,4 +41,23 @@ describe('UsersService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('should return all users', async () => {
+    const result = await service.findAll()
+    expect(result).toEqual(mockUsers)
+  })
+
+  it('should create user', async () => {
+    const result = await service.create(userExample)
+    expect(result).toEqual({
+      ...userExample,
+      id: expect.any(Number)
+    })
+  })
+
+  it('should find user by id', async () => {
+    const result = await service.findById(mockUsers[0].id)
+    expect(result).toEqual(mockUsers[0])
+  })
+
 });
