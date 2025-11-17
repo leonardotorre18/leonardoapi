@@ -25,10 +25,17 @@ export class User {
     enum: Role
   })
   roles: Role[];
+
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.Boolean,
+    default: false
+  })
+  verify: boolean
 }
 
 export class UserPublic {
-  _id: string;
+  id: string;
   email: string;
 }
 

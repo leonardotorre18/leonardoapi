@@ -22,33 +22,39 @@ export class UsersService {
   }
 
   async findDocumentByEmail(email: string): Promise<UserDocument> {
-   const result = await this.userModel.findOne({ email })
+    const result = await this.userModel.findOne({ email })
+    if (!result) throw new NotFoundException();
+    return result
+  }
+
+  async findDocumentById(id: string): Promise<UserDocument> {
+   const result = await this.userModel.findById(id)
     if (!result) throw new NotFoundException();
     return result
   }
 
   async findByEmail(email: string): Promise<UserPublic> {
-    const result = await this.userModel.findOne({ email })
+    const result = await this.userModel.findOne({ email, verify: true })
     if (!result) throw new NotFoundException();
     return {
-      _id: result._id.toString(),
+      id: result.id,
       email: result.email
     };
   }
   
   async delete(id: string): Promise<UserPublic> {
     const user = await this.findById(id);
-    const result = await this.userModel.deleteOne({ id: user._id })
+    const result = await this.userModel.deleteOne({ id: user.id })
     if (result.deletedCount == 1) return user
     throw new InternalServerErrorException()
   }
 
   async findById(id: string): Promise<UserPublic> {
     try {
-      const result = await this.userModel.findById(id, { email: true, _id: true });
+      const result = await this.userModel.findOne({ id: id, verify: true }, { email: true, _id: true });
       if (!result) throw new NotFoundException();
       return {
-        _id: result._id.toString(),
+        id: result.id,
         email: result.email
       };
     } catch {
@@ -57,6 +63,13 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserPublic[]> {
-    return this.userModel.find({}, { email: true, _id: true  });
+    return this.userModel.find({ verify: true }, { email: true, _id: true  });
+  }
+
+  async verifyByEmail(email: string): Promise<UserPublic> {
+    const user = await this.findDocumentByEmail(email);
+    user.verify = true;
+    await user.save();
+    return this.findByEmail(email)
   }
 }

@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import mongoEnv from './environments/mongo.env';
@@ -8,6 +6,8 @@ import jwtEnv from './environments/jwt.env';
 import { MongoConfigService } from './db/mongo.config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MailModule } from './modules/mail/mail.module';
+import smtpConfig from './environments/smtp.config';
 
 @Module({
   imports: [
@@ -15,6 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
       load: [
         mongoEnv,
         jwtEnv,
+        smtpConfig,
       ],
     }),
     MongooseModule.forRootAsync({
@@ -23,8 +24,9 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    MailModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  // controllers: [AppController],
+  // providers: [AppService],
 })
 export class AppModule {}

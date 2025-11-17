@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { User } from './schemas/users.schema';
+import { Role } from '../auth/enums/role.enum';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -24,7 +25,8 @@ describe('UsersService', () => {
   };
   const userExample = {
     email: 'example@domain.com',
-    password: '123'
+    password: '123',
+    roles: [Role.USER]
   }
 
   beforeEach(async () => {
