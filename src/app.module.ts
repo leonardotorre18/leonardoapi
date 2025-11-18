@@ -7,6 +7,7 @@ import { MongoConfigService } from './db/mongo.config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
+import { SongsModule } from './modules/songs/songs.module';
 import smtpConfig from './environments/smtp.config';
 
 @Module({
@@ -25,6 +26,7 @@ import smtpConfig from './environments/smtp.config';
     UsersModule,
     AuthModule,
     MailModule,
+    SongsModule,
   ],
   // controllers: [AppController],
   // providers: [AppService],
