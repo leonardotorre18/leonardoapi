@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { FileSaved } from 'src/modules/files-storage/types/file.interface';
 
 export type SongDocument = HydratedDocument<Song>;
 
@@ -22,6 +23,18 @@ export class Song {
     type: mongoose.Schema.Types.String
   })
   author: string;
+
+  @Prop({
+    required: true,
+    type: FileSaved,
+  })
+  image: FileSaved
+
+  @Prop({
+    required: true,
+    type: FileSaved,
+  })
+  audio: FileSaved
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);

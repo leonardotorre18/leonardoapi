@@ -8,7 +8,9 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 import { SongsModule } from './modules/songs/songs.module';
-import smtpConfig from './environments/smtp.config';
+import { FilesStorageModule } from './modules/files-storage/files-storage.module';
+import smtpEnv from './environments/smtp.env';
+import azureEnv from './environments/azure.env';
 
 @Module({
   imports: [
@@ -16,7 +18,8 @@ import smtpConfig from './environments/smtp.config';
       load: [
         mongoEnv,
         jwtEnv,
-        smtpConfig,
+        smtpEnv,
+        azureEnv,
       ],
     }),
     MongooseModule.forRootAsync({
@@ -27,6 +30,7 @@ import smtpConfig from './environments/smtp.config';
     AuthModule,
     MailModule,
     SongsModule,
+    FilesStorageModule,
   ],
   // controllers: [AppController],
   // providers: [AppService],
