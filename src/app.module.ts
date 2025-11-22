@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 import { SongsModule } from './modules/songs/songs.module';
 import { FilesStorageModule } from './modules/files-storage/files-storage.module';
+import { AlbumsModule } from './modules/albums/albums.module';
 import smtpEnv from './environments/smtp.env';
 import azureEnv from './environments/azure.env';
 
@@ -31,6 +32,7 @@ import azureEnv from './environments/azure.env';
     MailModule,
     SongsModule,
     FilesStorageModule,
+    AlbumsModule,
   ],
   // controllers: [AppController],
   // providers: [AppService],
