@@ -12,6 +12,7 @@ import { FilesStorageModule } from './modules/files-storage/files-storage.module
 import { AlbumsModule } from './modules/albums/albums.module';
 import smtpEnv from './environments/smtp.env';
 import azureEnv from './environments/azure.env';
+import { AuthorsModule } from './modules/authors/authors.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import azureEnv from './environments/azure.env';
     SongsModule,
     FilesStorageModule,
     AlbumsModule,
+    AuthorsModule,
   ],
   // controllers: [AppController],
   // providers: [AppService],
