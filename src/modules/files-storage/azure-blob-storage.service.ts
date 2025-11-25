@@ -25,6 +25,7 @@ export class AzureBlobStorageService  implements OnModuleInit {
 
   public async upload(file: File, containerName: ContainerName): Promise<FileSaved> {
     try {
+      console.log(file)
       const containerClient = this.client.getContainerClient(containerName);
       await containerClient.createIfNotExists({ access: 'container' });
 

@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Song, SongSchema } from './schemas/song.schema';
 import { ConfigModule } from '@nestjs/config';
 import { FilesStorageModule } from '../files-storage/files-storage.module';
+import { AuthorsModule } from '../authors/authors.module';
+import { AlbumsModule } from '../albums/albums.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { FilesStorageModule } from '../files-storage/files-storage.module';
       { name: Song.name, schema: SongSchema }
     ]),
     FilesStorageModule,
+    AuthorsModule,
+    AlbumsModule,
   ],
   providers: [SongsService],
   controllers: [SongsController]

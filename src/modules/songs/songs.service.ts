@@ -6,22 +6,29 @@ import { CreateSongDTO } from './dtos/create.dto';
 import { File } from '../files-storage/types/file.interface';
 import { AzureBlobStorageService } from '../files-storage/azure-blob-storage.service';
 import { ContainerName } from '../files-storage/enums/container-name.enum';
+import { AlbumsService } from '../albums/albums.service';
+import { AuthorsService } from '../authors/authors.service';
 
 @Injectable()
 export class SongsService {
   constructor(
     @InjectModel(Song.name) private songModel: Model<Song>,
-    private readonly azureBlobStorageService: AzureBlobStorageService
+    private readonly azureBlobStorageService: AzureBlobStorageService,
+    private readonly albumsService: AlbumsService,
+    private readonly authorsService: AuthorsService,
   ) { }
 
-  async create(song: CreateSongDTO, image: File, audio: File): Promise<SongDocument> {
+  async create(song: CreateSongDTO, audio: File): Promise<SongDocument> {
+    const author = await this.authorsService.findById(song.author)
+    const album = await this.albumsService.findById(song.album)
+
     try {
-      const imageSaved = await this.azureBlobStorageService.upload(image, ContainerName.songsImages)
       const audioSaved = await this.azureBlobStorageService.upload(audio, ContainerName.songsAudios)
 
       return this.songModel.create({
         ...song,
-        image: imageSaved,
+        author: author._id,
+        album: album._id,
         audio: audioSaved,
       });
     } catch {
@@ -30,11 +37,11 @@ export class SongsService {
   }
   
   findAll(): Promise<SongDocument[]> {
-    return this.songModel.find().exec();
+    return this.songModel.find().populate('author album');
   }
 
   async findById(id: string): Promise<SongDocument> {
-    const song = await this.songModel.findById(id);
+    const song = await this.songModel.findById(id).populate('author album');
     if (!song) throw new NotFoundException();
     return song;
   }
@@ -43,7 +50,6 @@ export class SongsService {
     const song = await this.findById(id);
 
     await this.azureBlobStorageService.delete(song.audio, ContainerName.songsAudios)
-    await this.azureBlobStorageService.delete(song.image, ContainerName.songsImages)
 
     const result = await song.deleteOne()
     if (result.deletedCount != 1)

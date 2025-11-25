@@ -27,8 +27,9 @@ export class AlbumsService {
   }
 
   async create(album: CreateAlbumDTO, image: File): Promise<Album> {
-    const imageSaved = await this.azureBlobStorageService.upload(image, ContainerName.albumsImages)
     const author = await this.authorsService.findById(album.author)
+
+    const imageSaved = await this.azureBlobStorageService.upload(image, ContainerName.albumsImages)
     
     try {
       return this.albumModel.create({

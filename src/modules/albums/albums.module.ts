@@ -16,5 +16,6 @@ import { AuthorsModule } from '../authors/authors.module';
   ],
   providers: [AlbumsService],
   controllers: [AlbumsController],
+  exports: [AlbumsService],
 })
 export class AlbumsModule { }
