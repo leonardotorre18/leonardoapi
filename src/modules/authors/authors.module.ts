@@ -14,6 +14,7 @@ import { FilesStorageModule } from '../files-storage/files-storage.module';
     FilesStorageModule,
   ],
   providers: [AuthorsService],
-  controllers: [AuthorsController]
+  controllers: [AuthorsController],
+  exports: [AuthorsService],
 })
 export class AuthorsModule { }

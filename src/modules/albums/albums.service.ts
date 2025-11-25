@@ -6,30 +6,34 @@ import { AzureBlobStorageService } from '../files-storage/azure-blob-storage.ser
 import { CreateAlbumDTO } from './dtos/create.dto';
 import { File } from '../files-storage/types/file.interface';
 import { ContainerName } from '../files-storage/enums/container-name.enum';
+import { AuthorsService } from '../authors/authors.service';
 
 @Injectable()
 export class AlbumsService {
   constructor(
     @InjectModel(Album.name) private readonly albumModel: Model<Album>,
-    private readonly azureBlobStorageService: AzureBlobStorageService
+    private readonly azureBlobStorageService: AzureBlobStorageService,
+    private readonly authorsService: AuthorsService,
   ) { }
 
   findAll(): Promise<Album[]> {
-    return this.albumModel.find()
+    return this.albumModel.find().populate('author')
   }
 
   async findById(id: string): Promise<AlbumDocument> {
-    const result = await this.albumModel.findById(id);
+    const result = await this.albumModel.findById(id).populate('author');
     if (!result) throw new NotFoundException();
     return result;
   }
 
   async create(album: CreateAlbumDTO, image: File): Promise<Album> {
+    const imageSaved = await this.azureBlobStorageService.upload(image, ContainerName.albumsImages)
+    const author = await this.authorsService.findById(album.author)
+    
     try {
-      const imageSaved = await this.azureBlobStorageService.upload(image, ContainerName.albumsImages)
-
       return this.albumModel.create({
         ...album,
+        author: author._id,
         image: imageSaved
       });
     } catch {

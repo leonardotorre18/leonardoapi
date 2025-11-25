@@ -44,6 +44,10 @@ export class AuthService {
 
   async login(user: LoginDTO): Promise<AuthResponse> {
     const result = await this.usersService.findDocumentByEmail(user.email);
+    // User should be verify
+    if (!result.verify) throw new UnauthorizedException();
+
+    // Validate password
     const validation = compareSync(user.password, result.password);
     if (!validation) throw new UnauthorizedException();
 

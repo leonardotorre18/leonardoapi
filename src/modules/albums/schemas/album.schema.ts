@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
+import { Author } from "src/modules/authors/schemas/author.schema";
 import { FileSaved } from "src/modules/files-storage/types/file.interface";
 
 export type AlbumDocument = HydratedDocument<Album>;
@@ -14,9 +15,10 @@ export class Album {
 
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Author.name
   })
-  author: string
+  author: Author
 
   @Prop({
     required: true,
