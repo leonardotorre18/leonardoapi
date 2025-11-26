@@ -6,6 +6,8 @@ export type AuthorDocument = HydratedDocument<Author>;
 
 @Schema()
 export class Author {
+  public _id: string;
+
   @Prop({
     required: true,
     type: mongoose.Schema.Types.String,

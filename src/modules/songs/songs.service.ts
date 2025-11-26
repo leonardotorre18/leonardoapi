@@ -20,8 +20,8 @@ export class SongsService {
   ) { }
 
   async create(song: CreateSongDTO, audio: File): Promise<SongDocument> {
-    const author = await this.authorsService.findById(song.author)
     const album = await this.albumsService.findById(song.album)
+    const author = await this.authorsService.findById(album.author._id as string)
 
     try {
       const audioSaved = await this.azureBlobStorageService.upload(audio, ContainerName.songsAudios)

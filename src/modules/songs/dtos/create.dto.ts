@@ -7,8 +7,4 @@ export class CreateSongDTO {
   @IsString()
   @IsNotEmpty()
   public readonly title: string;
-
-  @IsString()
-  @IsNotEmpty()
-  public readonly author: string;
 }
