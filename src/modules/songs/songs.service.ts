@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Song, SongDocument } from './schemas/song.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -14,6 +14,7 @@ export class SongsService {
   constructor(
     @InjectModel(Song.name) private songModel: Model<Song>,
     private readonly azureBlobStorageService: AzureBlobStorageService,
+    @Inject(forwardRef(() => AlbumsService))
     private readonly albumsService: AlbumsService,
     private readonly authorsService: AuthorsService,
   ) { }
@@ -56,5 +57,9 @@ export class SongsService {
       throw new InternalServerErrorException()
 
     return song;
+  }
+
+  async findByAlbum(albumId: string): Promise<Song[]> {
+    return this.songModel.find({ album: albumId }).populate('album author')
   }
 }

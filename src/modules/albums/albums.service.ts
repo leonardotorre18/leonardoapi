@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Album, AlbumDocument } from './schemas/album.schema';
 import { Model } from 'mongoose';
@@ -7,6 +7,8 @@ import { CreateAlbumDTO } from './dtos/create.dto';
 import { File } from '../files-storage/types/file.interface';
 import { ContainerName } from '../files-storage/enums/container-name.enum';
 import { AuthorsService } from '../authors/authors.service';
+import { Song } from '../songs/schemas/song.schema';
+import { SongsService } from '../songs/songs.service';
 
 @Injectable()
 export class AlbumsService {
@@ -14,6 +16,8 @@ export class AlbumsService {
     @InjectModel(Album.name) private readonly albumModel: Model<Album>,
     private readonly azureBlobStorageService: AzureBlobStorageService,
     private readonly authorsService: AuthorsService,
+    @Inject(forwardRef(() => SongsService))
+    private readonly songsService: SongsService,
   ) { }
 
   findAll(): Promise<Album[]> {
@@ -51,5 +55,9 @@ export class AlbumsService {
       throw new InternalServerErrorException()
 
     return album;
+  }
+
+  async findSongs(id: string): Promise<Song[]> {
+    return this.songsService.findByAlbum(id)
   }
 }

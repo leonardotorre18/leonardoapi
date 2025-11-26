@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AlbumsService } from './albums.service';
 import { AlbumsController } from './albums.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Album, AlbumSchema } from './schemas/album.schema';
 import { FilesStorageModule } from '../files-storage/files-storage.module';
 import { AuthorsModule } from '../authors/authors.module';
+import { SongsModule } from '../songs/songs.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthorsModule } from '../authors/authors.module';
     ]),
     FilesStorageModule,
     AuthorsModule,
+    forwardRef(() => SongsModule),
   ],
   providers: [AlbumsService],
   controllers: [AlbumsController],

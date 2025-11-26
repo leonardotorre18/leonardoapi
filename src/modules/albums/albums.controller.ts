@@ -25,6 +25,12 @@ export class AlbumsController {
       album: await this.albumService.findById(id)
     };
   }
+  @Get(':id/songs')
+  async findSongs(@Param() { id }: FindByIdParams) {
+    return {
+      songs: await this.albumService.findSongs(id)
+    };
+  }
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
