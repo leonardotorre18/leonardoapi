@@ -44,14 +44,14 @@ export class UsersService {
   
   async delete(id: string): Promise<UserPublic> {
     const user = await this.findById(id);
-    const result = await this.userModel.deleteOne({ id: user.id })
+    const result = await this.userModel.deleteOne({ _id: user.id })
     if (result.deletedCount == 1) return user
     throw new InternalServerErrorException()
   }
 
   async findById(id: string): Promise<UserPublic> {
     try {
-      const result = await this.userModel.findOne({ id: id, verify: true }, { email: true, _id: true });
+      const result = await this.userModel.findOne({ _id: id, verify: true }, { email: true, _id: true });
       if (!result) throw new NotFoundException();
       return {
         id: result.id,
