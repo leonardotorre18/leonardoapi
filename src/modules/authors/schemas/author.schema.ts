@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { FileSaved } from "src/modules/files-storage/types/file.interface";
+import { FileSaved } from "../../files-storage/types/file.interface";
 
 export type AuthorDocument = HydratedDocument<Author>;
 

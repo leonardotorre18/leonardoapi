@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Album } from 'src/modules/albums/schemas/album.schema';
-import { Author } from 'src/modules/authors/schemas/author.schema';
-import { FileSaved } from 'src/modules/files-storage/types/file.interface';
+import { Album } from '../../albums/schemas/album.schema';
+import { Author } from '../../authors/schemas/author.schema';
+import { FileSaved } from '../../files-storage/types/file.interface';
 
 export type SongDocument = HydratedDocument<Song>;
 
