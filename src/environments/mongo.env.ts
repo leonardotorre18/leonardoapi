@@ -4,6 +4,6 @@ import { MongooseModuleOptions } from '@nestjs/mongoose';
 export default registerAs(
   'mongo',
   (): MongooseModuleOptions => ({
-    uri: process.env.MONGO_CONNECTION_URI,
+    uri: process.env.MONGODB_URI,
   }),
 );
