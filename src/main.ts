@@ -14,6 +14,9 @@ async function bootstrap() {
   // Setup Scalar
   // setupScalar(app, documentFactory)
 
+  // Enable Cors
+  app.enableCors();
+
   // Setup Class-Validator
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
