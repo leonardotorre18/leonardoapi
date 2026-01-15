@@ -9,9 +9,9 @@ export class MailService {
     private configService: ConfigService,
   ) { }
 
-  verifyAccount(email: string, code: number): void {
+  async verifyAccount(email: string, code: number): Promise<void> {
     try {
-      this.mailerService.sendMail({
+      await this.mailerService.sendMail({
         from: `"LeonardoAPI" <${this.configService.getOrThrow<string>('smtp.user')}>`,
         to: email,
         subject: `Verificación de Cuenta ${email}`,

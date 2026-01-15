@@ -32,7 +32,7 @@ export class AuthService {
 
     // Generate and Send Email Verification Code 
     const { code } = await this.codeService.generate(result)
-    this.mailService.verifyAccount(user.email, code)
+    await this.mailService.verifyAccount(user.email, code)
 
     return {
       user: {
@@ -107,7 +107,7 @@ export class AuthService {
     const user = await this.usersService.findDocumentByEmail(email);
     const { code } = await this.codeService.generate(user);
 
-    this.mailService.verifyAccount(email,code);
+    await this.mailService.verifyAccount(email,code);
     return {
       user: {
         id: user.id,
