@@ -1,15 +1,19 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MailService {
-  constructor(private readonly mailerService: MailerService) { }
+  constructor(
+    private readonly mailerService: MailerService,
+    private configService: ConfigService,
+  ) { }
 
   verifyAccount(email: string, code: number): void {
     try {
       this.mailerService.sendMail({
-        from: 'Lorem Ipsum',
-        to: `Lorem Ipsum <${email}>`,
+        from: `"LeonardoAPI" <${this.configService.getOrThrow<string>('smtp.user')}>`,
+        to: email,
         subject: `Verificación de Cuenta ${email}`,
         text: `Este es el código para verificar su cuenta:\n
         ${code}
