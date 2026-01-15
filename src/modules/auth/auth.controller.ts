@@ -5,16 +5,12 @@ import { LoginDTO } from './dtos/login.dto';
 import { JwtAuthGuard } from './guards/jwt/jwt.guard';
 import type { Request as IRequest } from 'express';
 import type { Payload } from './types/payload.type';
-import { Roles } from './decorators/decorators.decorator';
-import { Role } from './enums/role.enum';
-import { RolesGuard } from './guards/roles/roles.guard';
-import { CodeService } from './code.service';
 import { VerifyAccountDTO } from './dtos/verify-account';
 import { ResendVerifyAccountDTO } from './dtos/resend-verify-account';
 
 @Controller('auth')
 export class AuthController {
-  constructor (private readonly authService: AuthService, private readonly codeService: CodeService) {}
+  constructor (private readonly authService: AuthService) {}
 
   @Post('register')
   register (@Body() user: RegisterDTO) {
@@ -31,6 +27,13 @@ export class AuthController {
   profile(@Request() req: IRequest) {
     const payload = req.user as Payload
     return this.authService.profile(payload.userId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('refresh')
+  refresh(@Request() req: IRequest) {
+    const payload = req.user as Payload
+    return this.authService.refresh(payload.userId)
   }
 
   // @Roles(Role.ADMIN)

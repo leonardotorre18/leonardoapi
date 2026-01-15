@@ -73,6 +73,22 @@ export class AuthService {
     }
   }
 
+  async refresh(userId: string): Promise<AuthResponse> {
+    const { id, email } = await this.usersService.findById(userId)
+    const result = await this.usersService.findDocumentByEmail(email)
+
+    const payload: Payload = {
+      email: result.email,
+      userId: result.id,
+      roles: result.roles
+    }
+
+    return {
+      user: { id, email },
+      accessToken: this.jwtService.sign(payload),
+    }
+  }
+
   async verifyAccount(email: string, code: number): Promise<AuthResponse> {
     const user = await this.usersService.findDocumentByEmail(email)
     const validation = await this.codeService.validate(user.id, code)
