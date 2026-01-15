@@ -33,12 +33,12 @@ export class AuthController {
     return this.authService.profile(payload.userId)
   }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('admin')
-  admin() {
-    return 'Admin route'
-  }
+  // @Roles(Role.ADMIN)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Post('admin')
+  // admin() {
+  //   return 'Admin route'
+  // }
 
   @Post('verify-account')
   async verifyAccount(@Body() { email, code }: VerifyAccountDTO) {

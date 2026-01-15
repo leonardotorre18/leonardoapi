@@ -65,12 +65,10 @@ export class AuthService {
     }
   }
 
-  async profile(userId: string): Promise<{ user: UserPublic, code: Code }> {
+  async profile(userId: string): Promise<{ user: UserPublic }> {
     const { id, email } = await this.usersService.findById(userId)
     const user = await this.usersService.findDocumentByEmail(email)
-    const code = await this.codeService.generate(user)
     return {
-      code,
       user: { id, email }
     }
   }
