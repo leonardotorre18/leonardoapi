@@ -13,7 +13,7 @@ import { SongsModule } from '../songs/songs.module';
       { name: Album.name, schema: AlbumSchema }
     ]),
     FilesStorageModule,
-    AuthorsModule,
+    forwardRef(() => AuthorsModule),
     forwardRef(() => SongsModule),
   ],
   providers: [AlbumsService],
