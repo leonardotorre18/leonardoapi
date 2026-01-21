@@ -30,6 +30,10 @@ export class AlbumsService {
     return result;
   }
 
+  async findByAuthor(authorId: string): Promise<Album[]> {
+    return this.albumModel.find({ author: authorId })
+  } 
+
   async create(album: CreateAlbumDTO, image: File): Promise<Album> {
     const author = await this.authorsService.findById(album.author)
 

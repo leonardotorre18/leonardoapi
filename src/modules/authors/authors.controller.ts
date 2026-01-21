@@ -9,10 +9,14 @@ import { JwtAuthGuard } from '../auth/guards/jwt/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles/roles.guard';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDTO } from './dtos/create.dto';
+import { AlbumsService } from '../albums/albums.service';
 
 @Controller('authors')
 export class AuthorsController {
-  constructor(private readonly authorsService: AuthorsService) { }
+  constructor(
+    private readonly authorsService: AuthorsService,
+    private readonly albumsService: AlbumsService,
+  ) { }
   @Get()
   async findAll() {
     return {
@@ -25,6 +29,13 @@ export class AuthorsController {
     return {
       author: await this.authorsService.findById(id)
     };
+  }
+
+  @Get(':id/albums')
+  async getAlbums(@Param() { id }: FindByIdParams) {
+    return {
+      albums: await this.albumsService.findByAuthor(id)
+    }
   }
 
   @Roles(Role.ADMIN)
