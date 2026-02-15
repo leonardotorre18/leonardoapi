@@ -13,9 +13,18 @@ import { AlbumsModule } from './modules/albums/albums.module';
 import smtpEnv from './environments/smtp.env';
 import azureEnv from './environments/azure.env';
 import { AuthorsModule } from './modules/authors/authors.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+      exclude: ['/api/{*test}'],
+      serveStaticOptions: {
+        fallthrough: false,
+      },
+    }),
     ConfigModule.forRoot({
       load: [
         mongoEnv,

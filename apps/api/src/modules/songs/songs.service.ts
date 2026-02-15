@@ -7,13 +7,14 @@ import { File } from '../files-storage/types/file.interface';
 import { ContainerName } from '../files-storage/enums/container-name.enum';
 import { AlbumsService } from '../albums/albums.service';
 import { AuthorsService } from '../authors/authors.service';
-import { VercelBlobStorageService } from '../files-storage/vercel-blob-storage.service';
+// import { VercelBlobStorageService } from '../files-storage/vercel-blob-storage.service';
+import { AzureBlobStorageService } from '../files-storage/azure-blob-storage.service';
 
 @Injectable()
 export class SongsService {
   constructor(
     @InjectModel(Song.name) private songModel: Model<Song>,
-    private readonly blobStorageService: VercelBlobStorageService,
+    private readonly blobStorageService: AzureBlobStorageService,
     @Inject(forwardRef(() => AlbumsService))
     private readonly albumsService: AlbumsService,
     private readonly authorsService: AuthorsService,

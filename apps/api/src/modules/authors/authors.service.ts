@@ -5,13 +5,14 @@ import { File } from '../files-storage/types/file.interface';
 import { ContainerName } from '../files-storage/enums/container-name.enum';
 import { Author, AuthorDocument } from './schemas/author.schema';
 import { CreateAuthorDTO } from './dtos/create.dto';
-import { VercelBlobStorageService } from '../files-storage/vercel-blob-storage.service';
+// import { VercelBlobStorageService } from '../files-storage/vercel-blob-storage.service';
+import { AzureBlobStorageService } from '../files-storage/azure-blob-storage.service';
 
 @Injectable()
 export class AuthorsService {
   constructor(
     @InjectModel(Author.name) private readonly authorModel: Model<Author>,
-    private readonly blobStorageService: VercelBlobStorageService
+    private readonly blobStorageService: AzureBlobStorageService
   ) { }
 
   findAll(): Promise<Author[]> {
