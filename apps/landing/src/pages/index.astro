@@ -7,126 +7,125 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<HeroSection />
+	<main class="max-w-7xl m-auto flex flex-col gap-20">
+		<HeroSection />
 
-	<section class="px-6 py-12">
-		<div class="text-center mb-12">
-			<p class="text-blue-700 font-semibold mb-2">Desarrollado por</p>
-			<h2 class="text-3xl text-white font-bold">El Stack Standard de la Industria</h2>
-		</div>
-		<div class="flex gap-4 flex-wrap">
-			<TechnologyCard
-				icon="logos:docker-icon"
-				name="Docker"
-			/>
-			<TechnologyCard
-				icon="logos:microsoft-azure"
-				name="Azure"
-			/>
-			<TechnologyCard
-				icon="logos:nestjs"
-				name="NestJS"
-			/>
-			<TechnologyCard
-				icon="vscode-icons:file-type-astro"
-				name="AstroJS"
-			/>
-			<TechnologyCard
-				icon="logos:mongodb-icon"
-				name="MongoDB"
-			/>
-			<TechnologyCard
-				icon="logos:swagger"
-				name="Swagger"
-			/>
-		</div>
-	</section>
-
-	<section class="py-12 px-6 text-center">
-		<div>
-			<h2 class="text-white text-3xl font-semibold mb-4">
-				Construyendo la siguiente Generación
-			</h2>
-			<p>
-				Nuestra API está diseñada para solucionar los complejos problemas de
-				backend con sencilles, una elegante solución que escala automáticamente
-			</p>
-		</div>
-
-		<div class="flex flex-wrap gap-8 py-12">
-			<ItemCard
-				icon="mdi:gauge-full"
-				title="Alto Rendimiento"
-				description="Nodos distribuidos globalmente con latencia ultrabaja que garantizan tiempos de respuesta inferiores a 20 ms en cualquier lugar."
-			/>
-			<ItemCard
-				icon="mdi:chart-areaspline"
-				title="Escalabilidad infinita"
-				description="De 1 a 1000 millones de solicitudes. Nuestra arquitectura de escalado automático gestiona su crecimiento sin problemas."
-			/>
-			<ItemCard
-				icon="mdi:clock-check-outline"
-				title="SLA de tiempo de actividad del 99,99 %"
-				description="Fiabilidad en la que puede confiar. Sistemas de conmutación por error redundantes entre múltiples proveedores de nube."
-			/>
-		</div>
-	</section>
-
-	<section class="p-6">
-		<div class="bg-gradient-to-br from-blue-600 to-blue-700 text-center flex flex-col items-center gap-10 p-12 rounded-lg text-white">
-			<div>
-				<h2 class="text-3xl font-semibold mb-6">¿Preparado para construir el futuro?</h2>
-				<p class="opacity-90s max-w-2xl">Únite a millones de desarrolladores que construyen productos. Conecta tu aplicación a nuestra API en menos de 60 seconds</p>
+		<section class="px-6 py-12">
+			<div class="text-center mb-12">
+				<p class="text-blue-700 font-semibold mb-2">Desarrollado por</p>
+				<h2 class="text-3xl text-white font-bold">El Stack Standard de la Industria</h2>
 			</div>
-			<div class="flex gap-8 flex-wrap">
-				<button class="text-blue-700 bg-white font-bold flex items-center px-8 py-5 rounded-lg gap-2 flex-auto flex justify-center">Comienza Gratis</button>
-				<button class="bg-transparent text-white font-bold flex items-center px-8 py-5 rounded-lg gap-2 ring-2 ring-blue-600 flex-auto flex justify-center">Contactanos</button>
-			</div>
-		</div>
-	</section>
-	
-	<div class="flex flex-col items-center lg:flex-row px-6 py-12 gap-12">
-		<div class="flex flex-1 gap-6 ring ring-slate-900 p-10">
-			<div>
-				<img
-					class="rounded-lg object-cover max-w-none"
-					src="https://github.com/leonardotorre18.png"
-					alt=""
-					width={120}
-					height={120}
+			<div class="flex gap-4 flex-wrap">
+				<TechnologyCard
+					icon="logos:docker-icon"
+					name="Docker"
+				/>
+				<TechnologyCard
+					icon="logos:microsoft-azure"
+					name="Azure"
+				/>
+				<TechnologyCard
+					icon="logos:nestjs"
+					name="NestJS"
+				/>
+				<TechnologyCard
+					icon="vscode-icons:file-type-astro"
+					name="AstroJS"
+				/>
+				<TechnologyCard
+					icon="logos:mongodb-icon"
+					name="MongoDB"
+				/>
+				<TechnologyCard
+					icon="logos:swagger"
+					name="Swagger"
 				/>
 			</div>
+		</section>
+	
+		<section class="py-12 px-6 text-center">
 			<div>
-				<h3 class="text-xl font-semibold text-white">Conóce al desarrollador</h3>
-				<p  class="text-sm">+3 años de experiencia como Desarrollador Web FullStack, construyendo interfaces de usuario y soluciones de software para multiples usuarios. Participo activamente como instructor sobre cursos de Diseño y Desarrollo web, capacitando a futuros profesionales de la industria.</p>
+				<h2 class="text-white text-3xl font-semibold mb-4">
+					Construyendo la siguiente Generación
+				</h2>
+				<p>
+					Nuestra API está diseñada para solucionar los complejos problemas de
+					backend con sencilles, una elegante solución que escala automáticamente
+				</p>
 			</div>
-		</div>
-
-		<div class="flex-1">
-			<div class="flex items-center gap-3 mb-6">
-				<div class="bg-blue-950 p-2 rounded-full">
-					<Icon class:list={['text-blue-500']} name="mdi:handshake" size={32} />
+	
+			<div class="flex flex-wrap gap-8 py-12">
+				<ItemCard
+					icon="mdi:gauge-full"
+					title="Alto Rendimiento"
+					description="Nodos distribuidos globalmente con latencia ultrabaja que garantizan tiempos de respuesta inferiores a 20 ms en cualquier lugar."
+				/>
+				<ItemCard
+					icon="mdi:chart-areaspline"
+					title="Escalabilidad infinita"
+					description="De 1 a 1000 millones de solicitudes. Nuestra arquitectura de escalado automático gestiona su crecimiento sin problemas."
+				/>
+				<ItemCard
+					icon="mdi:clock-check-outline"
+					title="SLA de tiempo de actividad del 99,99 %"
+					description="Fiabilidad en la que puede confiar. Sistemas de conmutación por error redundantes entre múltiples proveedores de nube."
+				/>
+			</div>
+		</section>
+	
+		<section class="px-6 py-12">
+			<div class="bg-gradient-to-br from-blue-600 to-blue-700 text-center flex flex-col items-center gap-10 p-12 rounded-lg text-white">
+				<div>
+					<h2 class="text-3xl font-semibold mb-6">¿Preparado para construir el futuro?</h2>
+					<p class="opacity-90s max-w-2xl">Únite a millones de desarrolladores que construyen productos. Conecta tu aplicación a nuestra API en menos de 60 seconds</p>
 				</div>
-				<h3 class="text-2xl font-semibold uppercase">Orgullosamente Patrocinado por</h3>
+				<div class="flex gap-8 flex-wrap">
+					<button class="text-blue-700 bg-white font-bold flex items-center px-8 py-5 rounded-lg gap-2 flex-auto flex justify-center">Comienza Gratis</button>
+					<button class="bg-transparent text-white font-bold flex items-center px-8 py-5 rounded-lg gap-2 ring-2 ring-blue-600 flex-auto flex justify-center">Contactanos</button>
+				</div>
 			</div>
-
-			<div class="flex gap-3 bg-blue-950 rounded-lg p-10 items-center">
+		</section>
+		
+		<div class="flex flex-col items-center lg:flex-row px-6 py-12 gap-12">
+			<div class="flex flex-1 gap-6 ring ring-slate-900 p-10 rounded-lg">
 				<div>
 					<img
-						src="https://institutoalfa.org/wp-content/uploads/2023/07/Logo_Instituto_Alfa_White-1-150x50.png"
-						class="max-w-none"
-						width={120}
+						class="rounded-lg object-cover max-w-none"
+						src="https://github.com/leonardotorre18.png"
 						alt=""
-					>
-					<!-- <div>
-						<h4>Instituto Alfa</h4>
-						<p>Research & excellence</p>
-					</div> -->
+						width={120}
+						height={120}
+					/>
 				</div>
-				<div class="bg-red-500 h-full w-[1px]"></div>
-				<p class="text-sm italic">Una alianza estratégica enfocada en impulsar la próxima generación de computación en la nube y herramientas para desarrolladores.</p>
+				<div>
+					<h3 class="text-xl font-semibold text-white mb-2">Conóce al desarrollador</h3>
+					<p  class="text-sm">+3 años de experiencia como Desarrollador Web FullStack, construyendo interfaces de usuario y soluciones de software para multiples usuarios. Participo activamente como instructor sobre cursos de Diseño y Desarrollo web, capacitando a futuros profesionales de la industria.</p>
+				</div>
 			</div>
-
+	
+			<div class="flex-1">
+				<div class="flex items-center gap-3 mb-6">
+					<div class="bg-blue-950 p-2 rounded-full">
+						<Icon class:list={['text-blue-500']} name="mdi:handshake" size={32} />
+					</div>
+					<h3 class="text-2xl font-semibold uppercase">Orgullosamente Patrocinado por</h3>
+				</div>
+	
+				<div class="flex gap-6 bg-blue-950 rounded-lg p-10 ring ring-blue-800/50">
+					<div class="flex items-center">
+						<img
+							src="https://institutoalfa.org/wp-content/uploads/2023/07/Logo_Instituto_Alfa_White-1-150x50.png"
+							class="max-w-none"
+							width={120}
+							alt=""
+						>
+					</div>
+					<div class="bg-slate-500/30 w-[1px]"></div>
+					<p class="text-sm italic">Una alianza estratégica enfocada en impulsar la próxima generación de computación en la nube y herramientas para desarrolladores.</p>
+				</div>
+	
+			</div>
 		</div>
-	</div>
+	</main>
+
 </Layout>
