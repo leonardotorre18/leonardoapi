@@ -1,6 +1,7 @@
 ---
 import HeroSection from "../components/HeroSection.astro";
 import ItemCard from "../components/ItemCard.astro";
+import TechnologyCard from "../components/TechnologyCard.astro";
 import Layout from "../layouts/Layout.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -10,7 +11,40 @@ import Layout from "../layouts/Layout.astro";
 <Layout>
 	<HeroSection />
 
-	<section class="py-6 px-6 text-center">
+	<section class="px-6 py-12">
+		<div class="text-center mb-12">
+			<p class="text-blue-700 font-semibold mb-2">Desarrollado por</p>
+			<h2 class="text-3xl text-white font-bold">Leonardo Torrealba</h2>
+		</div>
+		<div class="flex gap-4 flex-wrap">
+			<TechnologyCard
+				icon="logos:docker-icon"
+				name="Docker"
+			/>
+			<TechnologyCard
+				icon="logos:microsoft-azure"
+				name="Azure"
+			/>
+			<TechnologyCard
+				icon="logos:nestjs"
+				name="NestJS"
+			/>
+			<TechnologyCard
+				icon="vscode-icons:file-type-astro"
+				name="AstroJS"
+			/>
+			<TechnologyCard
+				icon="logos:mongodb-icon"
+				name="MongoDB"
+			/>
+			<TechnologyCard
+				icon="logos:swagger"
+				name="Swagger"
+			/>
+		</div>
+	</section>
+
+	<section class="py-12 px-6 text-center">
 		<div>
 			<h2 class="text-white text-3xl font-semibold mb-4">
 				Construyendo la siguiente Generación
@@ -46,9 +80,9 @@ import Layout from "../layouts/Layout.astro";
 				<h2 class="text-3xl font-semibold mb-6">¿Preparado para construir el futuro?</h2>
 				<p class="opacity-90s max-w-2xl">Únite a millones de desarrolladores que construyen productos. Conecta tu aplicación a nuestra API en menos de 60 seconds</p>
 			</div>
-			<div class="flex gap-8">
-				<button class="text-blue-700 bg-white font-bold flex items-center px-8 py-5 rounded-lg gap-2">Comienza Gratis</button>
-				<button class="bg-transparent text-white font-bold flex items-center px-8 py-5 rounded-lg gap-2 ring-2 ring-blue-600">Contactanos</button>
+			<div class="flex gap-8 flex-wrap">
+				<button class="text-blue-700 bg-white font-bold flex items-center px-8 py-5 rounded-lg gap-2 flex-auto flex justify-center">Comienza Gratis</button>
+				<button class="bg-transparent text-white font-bold flex items-center px-8 py-5 rounded-lg gap-2 ring-2 ring-blue-600 flex-auto flex justify-center">Contactanos</button>
 			</div>
 		</div>
 	</section>
