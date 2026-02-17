@@ -1,11 +1,9 @@
 ---
+import { Icon } from "astro-icon/components";
 import HeroSection from "../components/HeroSection.astro";
 import ItemCard from "../components/ItemCard.astro";
 import TechnologyCard from "../components/TechnologyCard.astro";
 import Layout from "../layouts/Layout.astro";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
@@ -14,7 +12,7 @@ import Layout from "../layouts/Layout.astro";
 	<section class="px-6 py-12">
 		<div class="text-center mb-12">
 			<p class="text-blue-700 font-semibold mb-2">Desarrollado por</p>
-			<h2 class="text-3xl text-white font-bold">Leonardo Torrealba</h2>
+			<h2 class="text-3xl text-white font-bold">El Stack Standard de la Industria</h2>
 		</div>
 		<div class="flex gap-4 flex-wrap">
 			<TechnologyCard
@@ -86,4 +84,49 @@ import Layout from "../layouts/Layout.astro";
 			</div>
 		</div>
 	</section>
+	
+	<div class="flex flex-col items-center lg:flex-row px-6 py-12 gap-12">
+		<div class="flex flex-1 gap-6 ring ring-slate-900 p-10">
+			<div>
+				<img
+					class="rounded-lg object-cover max-w-none"
+					src="https://github.com/leonardotorre18.png"
+					alt=""
+					width={120}
+					height={120}
+				/>
+			</div>
+			<div>
+				<h3 class="text-xl font-semibold text-white">Conóce al desarrollador</h3>
+				<p  class="text-sm">+3 años de experiencia como Desarrollador Web FullStack, construyendo interfaces de usuario y soluciones de software para multiples usuarios. Participo activamente como instructor sobre cursos de Diseño y Desarrollo web, capacitando a futuros profesionales de la industria.</p>
+			</div>
+		</div>
+
+		<div class="flex-1">
+			<div class="flex items-center gap-3 mb-6">
+				<div class="bg-blue-950 p-2 rounded-full">
+					<Icon class:list={['text-blue-500']} name="mdi:handshake" size={32} />
+				</div>
+				<h3 class="text-2xl font-semibold uppercase">Orgullosamente Patrocinado por</h3>
+			</div>
+
+			<div class="flex gap-3 bg-blue-950 rounded-lg p-10 items-center">
+				<div>
+					<img
+						src="https://institutoalfa.org/wp-content/uploads/2023/07/Logo_Instituto_Alfa_White-1-150x50.png"
+						class="max-w-none"
+						width={120}
+						alt=""
+					>
+					<!-- <div>
+						<h4>Instituto Alfa</h4>
+						<p>Research & excellence</p>
+					</div> -->
+				</div>
+				<div class="bg-red-500 h-full w-[1px]"></div>
+				<p class="text-sm italic">Una alianza estratégica enfocada en impulsar la próxima generación de computación en la nube y herramientas para desarrolladores.</p>
+			</div>
+
+		</div>
+	</div>
 </Layout>

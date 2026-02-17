@@ -1,14 +1,27 @@
-<header>
-  <nav class="flex justify-between px-6 py-2 text-white">
-    <div>Logo</div>
+---
+import { Icon } from "astro-icon/components";
+---
 
-    <ul class="flex gap-4">
+<header>
+  <nav class="flex justify-between px-6 py-4 text-white">
+    <div class="flex gap-2 font-bold text-lg text-white">
+      <div class="bg-gradient-to-br from-blue-600 to-blue-700 p-1 rounded">
+        <!-- mdi:fire or mdi:flash -->
+        <Icon
+          name="mdi:flash"
+          size={24}
+        />
+      </div>
+      API Alfa
+    </div>
+
+    <ul class="flex gap-4 font-semibold">
       <li><a href="/">Inicio</a></li>
       <li><a href="/docs">Documentación</a></li>
     </ul>
 
-    <div>
+    <!-- <div>
       <button>Github</button>
-    </div>
+    </div> -->
   </nav>
 </header>
