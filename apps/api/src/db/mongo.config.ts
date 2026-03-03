@@ -14,6 +14,7 @@ export class MongoConfigService implements MongooseOptionsFactory {
     | MongooseModuleOptions {
     return {
       uri: this.config.getOrThrow<string>('mongo.uri'),
+      dbName: this.config.getOrThrow<string>('mongo.dbName')
     };
   }
 }
