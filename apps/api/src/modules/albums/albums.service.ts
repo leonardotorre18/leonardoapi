@@ -7,13 +7,27 @@ export class AlbumsService {
   constructor(private readonly repository: PrismaService) { }
 
   find() {
-    return this.repository.album.findMany()
+    return this.repository.album.findMany({
+      include: {
+        artist: true
+      },
+      omit: {
+        artistId: true
+      }
+    })
   }
 
   findById(id: string) {
     return this.repository.album.findUnique({
       where: {
         id
+      },
+      include: {
+        artist: true,
+        tracks: true
+      },
+      omit: {
+        artistId: true
       }
     })
   }

@@ -1,6 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDTO } from './dto/create.dto';
+import { Role } from 'generated/prisma/enums';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt/jwt.guard';
+import { RolesGuard } from '../auth/guards/roles/roles.guard';
 
 @Controller('artists')
 export class ArtistsController {
@@ -19,6 +23,8 @@ export class ArtistsController {
     };
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   async create(@Body() body: CreateArtistDTO) {
     return {
