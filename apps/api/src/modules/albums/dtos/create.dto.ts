@@ -1,10 +1,12 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-export class CreateAlbumDTO {
-  @IsString()
-  @IsNotEmpty()
-  public readonly title: string;
+import { Album } from 'generated/prisma/browser';
 
+export class CreateAlbumDTO implements Pick<Album, 'title'|'artistId'> {
   @IsString()
   @IsNotEmpty()
-  public readonly author: string;
+  public readonly title!: string;
+  
+  @IsString()
+  @IsNotEmpty()
+  public readonly artistId!: string;
 }

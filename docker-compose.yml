@@ -1,42 +1,65 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: production
-    container_name: leonardoapi
-    depends_on:
-      - mongodb
-      - blobstorage
-    env_file:
-      - .env
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-    networks:
-      - network
-    ports:
-      - "3000:3000"
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: production
+  #   container_name: leonardoapi
+  #   depends_on:
+  #     - mongodb
+  #     - blobstorage
+  #   env_file:
+  #     - .env
+  #   restart: unless-stopped
+  #   environment:
+  #     - NODE_ENV=production
+  #   networks:
+  #     - network
+  #   ports:
+  #     - "3000:3000"
   
-  mongodb:
-    image: mongo
-    container_name: mongodb
-    networks:
-      - network
-    restart: unless-stopped
+  # mongodb:
+  #   image: mongo
+  #   container_name: mongodb
+  #   # networks:
+  #   #   - network
+  #   restart: unless-stopped
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: "${MONGODB_USERNAME}"
+  #     MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_PASSWORD}"
+  #   ports:
+  #     - "${MONGO_PORT:-27017}:27017"
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    restart: always
     env_file:
       - .env
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_USERNAME}"
-      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_PASSWORD}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-123}"
+      POSTGRES_USER: "${POSTGRES_USER:-postgres}"
+      POSTGRES_DB: "${POSTGRES_DB:-postgres}"
     ports:
-      - "${MONGO_PORT:-27017}:27017"
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-vista_dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # networks:
+    #   - lodejor-network
+
   
   blobstorage:
     image: mcr.microsoft.com/azure-storage/azurite
     container_name: azureblobstorage
-    networks:
-      - network
+    # networks:
+    #   - network
     ports:
       - "10000:10000"
       - "10001:10001"
@@ -44,6 +67,6 @@ services:
     command: ["azurite-blob", "--blobHost", "0.0.0.0"]
     restart: unless-stopped
 
-networks: 
-  network:
-    driver: bridge
+# networks: 
+#   network:
+#     driver: bridge

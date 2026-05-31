@@ -1,51 +1,39 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import mongoEnv from './environments/mongo.env';
+import dbEnv from './environments/db.env';
 import jwtEnv from './environments/jwt.env';
-import { MongoConfigService } from './db/mongo.config';
-import { UsersModule } from './modules/users/users.module';
+import smtpEnv from './environments/smtp.env';
+import azureEnv from './environments/azure.env';;
+import { TracksModule } from './modules/tracks/tracks.module';
+import { AlbumsModule } from './modules/albums/albums.module';
+import { ArtistsModule } from './modules/artists/artists.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
-import { SongsModule } from './modules/songs/songs.module';
-import { FilesStorageModule } from './modules/files-storage/files-storage.module';
-import { AlbumsModule } from './modules/albums/albums.module';
-import smtpEnv from './environments/smtp.env';
-import azureEnv from './environments/azure.env';
-import { AuthorsModule } from './modules/authors/authors.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+// import { ServeStaticModule } from '@nestjs/serve-static';
+// import { join } from 'path';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
-      exclude: ['/api/{*test}'],
-      serveStaticOptions: {
-        fallthrough: false,
-      },
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'client'),
+    //   exclude: ['/api/{*test}'],
+    //   serveStaticOptions: {
+    //     fallthrough: false,
+    //   },
+    // }),
     ConfigModule.forRoot({
       load: [
-        mongoEnv,
+        dbEnv,
         jwtEnv,
         smtpEnv,
         azureEnv,
       ],
     }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useClass: MongoConfigService,
-    }),
-    UsersModule,
     AuthModule,
     MailModule,
-    SongsModule,
-    FilesStorageModule,
     AlbumsModule,
-    AuthorsModule,
+    ArtistsModule,
+    TracksModule,
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
 })
 export class AppModule {}

@@ -1,32 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateAlbumDTO } from './dtos/create.dto';
+import { CreateArtistDTO } from './dto/create.dto';
 
 @Injectable()
-export class AlbumsService {
+export class ArtistsService {
   constructor(private readonly repository: PrismaService) { }
 
   find() {
-    return this.repository.album.findMany()
+    return this.repository.artist.findMany()
   }
 
   findById(id: string) {
-    return this.repository.album.findUnique({
+    return this.repository.artist.findUnique({
       where: {
         id
       }
     })
   }
 
-  create({ title, artistId }: CreateAlbumDTO) {
-    return this.repository.album.create({
+  create(body: CreateArtistDTO) {
+    return this.repository.artist.create({
       data: {
-        title,
-        artistId,
-        thumbnail: '',
-        thumbnailKey: '',
+        ...body,
         image: '',
         imageKey: '',
+        thumbail: '',
+        thumbnailKey: '',
       }
     })
   }

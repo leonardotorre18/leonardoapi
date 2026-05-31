@@ -1,6 +1,6 @@
-import { UserPublic } from "../../users/schemas/users.schema"
+import { Payload } from "./payload.type"
 
-export interface AuthResponse {
-  user: UserPublic
+export interface Auth {
+  user: Payload
   accessToken: string
 }

@@ -1,28 +1,34 @@
 {
   "name": "leonardoapi",
-  "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leonardotorre18/leonardoapi.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Leonardo Torrealba",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/leonardotorre18/leonardoapi/issues"
   },
   "homepage": "https://github.com/leonardotorre18/leonardoapi#readme",
   "description": "",
-  "workspaces": [
-    "apps/*"
-  ],
+
   "devDependencies": {
-    "turbo": "^2.8.9"
+    "prettier": "^3.7.4",
+    "turbo": "^2.8.17",
+    "typescript": "5.9.2"
   },
-  "packageManager": "npm@10.9.2"
+  "packageManager": "pnpm@11.1.3",
+  
+  "engines": {
+    "node": ">=18"
+  }
 }

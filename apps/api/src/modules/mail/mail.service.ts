@@ -1,6 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Mail } from './types/mail.type';
 
 @Injectable()
 export class MailService {
@@ -9,15 +10,13 @@ export class MailService {
     private configService: ConfigService,
   ) { }
 
-  async verifyAccount(email: string, code: number): Promise<void> {
+  async send({ to, subject, body }: Mail): Promise<void> {
     try {
       await this.mailerService.sendMail({
         from: `"LeonardoAPI" <${this.configService.getOrThrow<string>('smtp.user')}>`,
-        to: email,
-        subject: `Verificación de Cuenta ${email}`,
-        text: `Este es el código para verificar su cuenta:\n
-        ${code}
-        `,
+        to,
+        subject,
+        text: body,
       })
     } catch {
       throw new InternalServerErrorException()

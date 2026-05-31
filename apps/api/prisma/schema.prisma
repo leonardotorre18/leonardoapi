@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgres"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Track {
+  id String @id @default(ulid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  title String
+
+  album Album @relation(fields: [albumId], references: [id])
+  albumId String @map("album_id")
+
+  artist Artist @relation(fields: [artistId], references: [id])
+  artistId String @map("artist_id")
+
+  playlists Playlist[]
+
+  @@map("tracks")
+}
+
+model Album {
+  id String @id @default(ulid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  title String
+
+  image String
+  imageKey String @map("image_key")
+  thumbnail String
+  thumbnailKey String @map("thumbnail_key")
+
+  artist Artist @relation(fields: [artistId], references: [id])
+  artistId String @map("artist_id")
+  
+  tracks Track[]
+
+  @@map("albums")
+}
+
+model Artist {
+  id String @id @default(ulid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  name String
+
+  image String
+  imageKey String @map("image_key")
+  thumbail String
+  thumbnailKey String @map("thumbnail_key")
+
+  tracks Track[]
+  albums Album[]
+
+  @@map("artists")
+}
+
+model User {
+  id String @id @default(ulid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  email String @unique
+  name String
+  passwordHash String @map("password_hash")
+
+  isVerified Boolean @default(false) @map("is_verified")
+  verificationToken String? @map("verification_token")
+  tokenExpires DateTime? @map("token_expires")
+
+  codes Code[]
+  role Role[] @default([USER])
+
+  playlists Playlist[]
+
+  @@map("users")
+}
+
+model Code {
+  id String @id @default(ulid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  codeHash String @map("code_hash")
+
+  userId String @map("user_id")
+  user User @relation(fields: [userId], references: [id])
+
+  attempts Int
+  purpose String
+
+  @@map("codes")
+}
+
+model Playlist {
+  id String @id @default(ulid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tracks Track[]
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@map("playlists")
+}

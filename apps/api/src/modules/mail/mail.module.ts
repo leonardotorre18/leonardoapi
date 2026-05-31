@@ -13,6 +13,6 @@ import { NodeMailerConfigService } from './node-mailer.config';
     }),
   ],
   providers: [MailService],
-  exports: [MailService,]
+  exports: [MailService]
 })
 export class MailModule {}

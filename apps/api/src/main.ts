@@ -1,9 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { setupSwagger } from './docs/swagger';
-// import { SwaggerModule } from '@nestjs/swagger';
-import { setupScalar } from './docs/scalar';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,11 +9,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api')
 
   // Setup Swagger
-  const documentFactory = setupSwagger(app)
+  // const documentFactory = setupSwagger(app)
   // SwaggerModule.setup('docs', app, documentFactory)
 
   // Setup Scalar
-  setupScalar(app, documentFactory)
+  // setupScalar(app, documentFactory)
 
   // Enable Cors
   app.enableCors();
@@ -26,6 +23,9 @@ async function bootstrap() {
     transform: true,
     whitelist: true,
   }));
+
+  // CookieParser
+  // app.use(cookieParser())
 
   await app.listen(process.env.PORT ?? 3000);
 }

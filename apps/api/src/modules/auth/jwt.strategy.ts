@@ -7,15 +7,26 @@ import { Payload } from './types/payload.type';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly config: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // jwtFromRequest: (req: Request) => req.cookies.accessToken,
       ignoreExpiration: false,
-      secretOrKey: config.getOrThrow<string>('jwt.secret'),
+      secretOrKey: configService.getOrThrow<string>('jwt.secret'),
     });
   }
 
-  async validate({ userId, email, roles }: Payload): Promise<Payload> {
-    return { userId, email, roles };
+  async validate({
+    email,
+    roles,
+    sub,
+    name,
+  }: Payload): Promise<Payload> {
+    return {
+      email,
+      roles,
+      sub,
+      name,
+    };
   }
 }

@@ -1,132 +1,150 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { User, UserDocument, UserPublic } from '../users/schemas/users.schema';
-import { compareSync, hashSync } from 'bcrypt';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { RegisterDTO } from './dtos/register.dto';
 import { LoginDTO } from './dtos/login.dto';
-import { AuthResponse } from './types/auth.type';
 import { JwtService } from '@nestjs/jwt';
-import { Payload } from './types/payload.type';
-import { Role } from './enums/role.enum';
-import { CodeService } from './code.service';
-import { Code } from './schemas/code.schema';
 import { MailService } from '../mail/mail.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { Payload } from './types/payload.type';
+import { Auth } from './types/auth.type';
+import bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly codeService: CodeService,
     private readonly mailService: MailService,
+    private readonly repository: PrismaService,
   ) { }
 
-  async register(user: RegisterDTO): Promise<{ user: UserPublic }> {
-    // Create User
-    const result = await this.usersService.create({
-      ...user,
-      verify: false,
-      roles: [Role.USER],
-      password: hashSync(user.password, 10)
+  async register({ email, name, password }: RegisterDTO) {
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const tokenExpires = new Date();
+    tokenExpires.setMinutes(tokenExpires.getMinutes() + 15);
+
+    const user = await this.repository.user.create({
+      data: {
+        email,
+        name,
+        passwordHash: bcrypt.hashSync(password, 8),
+        verificationToken,
+        tokenExpires,
+      },
+      select: {
+        email: true,
+        name: true,
+        role: true,
+        id: true,
+      },
     })
 
-    // Generate and Send Email Verification Code 
-    const { code } = await this.codeService.generate(result)
-    await this.mailService.verifyAccount(user.email, code)
+    await this.mailService.send({
+      to: email,
+      subject: 'Verificación de cuenta para ' + email,
+      body: `
+        Para verificar tu cuenta has <a href="http://localhost:3000/api/auth/verify?token=${verificationToken}">click en este enlace</a><br>
+        Este enlace vence en 15min
+      `
+    })
 
-    return {
-      user: {
-        id: result.id,
-        email: result.email
-      },
-    }
+    return user
+
   }
 
-  async login(user: LoginDTO): Promise<AuthResponse> {
-    const result = await this.usersService.findDocumentByEmail(user.email);
-    // User should be verify
-    if (!result.verify) throw new UnauthorizedException();
+  async login({ email, password }: LoginDTO): Promise<Auth> {
+    const user = await this.repository.user.findUnique({ where: { email } })
 
-    // Validate password
-    const validation = compareSync(user.password, result.password);
-    if (!validation) throw new UnauthorizedException();
+    if (!user)
+      throw new NotFoundException()
 
-    const payload: Payload = {
-      email: result.email,
-      userId: result.id,
-      roles: result.roles
-    }
-    return {
-      user: {
-        id: result.id,
-        email: result.email
-      },
-      accessToken: this.jwtService.sign(payload),
-    }
-  }
+    if (!bcrypt.compareSync(password, user.passwordHash))
+      throw new UnauthorizedException()
 
-  async profile(userId: string): Promise<{ user: UserPublic }> {
-    const { id, email } = await this.usersService.findById(userId)
-    const user = await this.usersService.findDocumentByEmail(email)
-    return {
-      user: { id, email }
-    }
-  }
-
-  async refresh(userId: string): Promise<AuthResponse> {
-    const { id, email } = await this.usersService.findById(userId)
-    const result = await this.usersService.findDocumentByEmail(email)
-
-    const payload: Payload = {
-      email: result.email,
-      userId: result.id,
-      roles: result.roles
-    }
-
-    return {
-      user: { id, email },
-      accessToken: this.jwtService.sign(payload),
-    }
-  }
-
-  async verifyAccount(email: string, code: number): Promise<AuthResponse> {
-    const user = await this.usersService.findDocumentByEmail(email)
-    const validation = await this.codeService.validate(user.id, code)
-
-    // Verify Validation Account
-    if (!validation)
-      throw new BadRequestException()
-
-    // Verify Account
-    await this.usersService.verifyByEmail(user.email)
-
-    // Delete Verify Code
-    await this.codeService.deleteByUser(user.id)
+    if (!user.isVerified)
+      throw new UnauthorizedException()
 
     const payload: Payload = {
       email: user.email,
-      userId: user.id,
-      roles: user.roles,
+      name: user.name,
+      sub: user.id,
+      roles: user.role
     }
+
     return {
-      user: {
-        id: user.id,
-        email: user.email,
-      },
+      user: payload,
       accessToken: this.jwtService.sign(payload),
-    };
-  }
-
-  async resendVerifyAccount(email: string): Promise<{ user: UserPublic }> {
-    const user = await this.usersService.findDocumentByEmail(email);
-    const { code } = await this.codeService.generate(user);
-
-    await this.mailService.verifyAccount(email,code);
-    return {
-      user: {
-        id: user.id,
-        email: user.email,
-      }
     }
   }
+
+  async verify(verificationToken: string) {
+    const user = await this.repository.user.findFirst({
+      where: { verificationToken }
+    });
+    if (!user)
+      throw new NotFoundException();
+
+    if (!user.tokenExpires || user.tokenExpires < new Date()) {
+      throw new BadRequestException();
+      
+    }
+
+    await this.repository.user.update({
+      where: { id: user.id },
+      data: {
+        isVerified: true,
+        verificationToken: null,
+        tokenExpires: null,
+      }
+    });
+
+    return {
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      id: user.id,
+    }
+  }
+
+  async resendVerification(email: string) {
+    const user = await this.repository.user.findUnique({
+      where: { email }
+    });
+
+    if (!user || user.isVerified)
+      throw new BadRequestException();
+
+    if (user.tokenExpires && user.tokenExpires > new Date()) {
+      throw new BadRequestException();
+    }
+
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const tokenExpires = new Date();
+    tokenExpires.setMinutes(tokenExpires.getMinutes() + 15);
+
+    await this.repository.user.update({
+      where: { id: user.id },
+      data: {
+        verificationToken,
+        tokenExpires,
+      }
+    });
+
+    await this.mailService.send({
+      to: email,
+      subject: 'Verificación de cuenta para ' + email,
+      body: `
+        Para verificar tu cuenta has <a href="http://localhost:3000/api/auth/verify?token=${verificationToken}">click en este enlace</a><br>
+        Este enlace vence en 15min
+      `
+    })
+
+    return {
+      email,
+      name: user.name,
+      role: user.role,
+      id: user.id,
+    }
+  }
+
+
 }

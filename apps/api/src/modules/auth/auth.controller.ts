@@ -1,56 +1,45 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './dtos/register.dto';
 import { LoginDTO } from './dtos/login.dto';
 import { JwtAuthGuard } from './guards/jwt/jwt.guard';
-import type { Request as IRequest } from 'express';
-import type { Payload } from './types/payload.type';
-import { VerifyAccountDTO } from './dtos/verify-account';
-import { ResendVerifyAccountDTO } from './dtos/resend-verify-account';
+import type { Request } from 'express';
+import { VerifyDTO } from './dtos/verify.dto';
+import { ResendVerificationDTO } from './dtos/resend-verification';
 
 @Controller('auth')
 export class AuthController {
-  constructor (private readonly authService: AuthService) {}
+  constructor (private readonly service: AuthService) {}
 
   @Post('register')
   register (@Body() user: RegisterDTO) {
-    return this.authService.register(user)
+    return this.service.register(user)
   }
 
   @Post('login')
-  login(@Body() user: LoginDTO) {
-    return this.authService.login(user)
+  async login(@Body() body: LoginDTO) {
+    return this.service.login(body);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('profile')
-  profile(@Request() req: IRequest) {
-    const payload = req.user as Payload
-    return this.authService.profile(payload.userId)
+  @Get('profile')
+  getProfile(@Req() req: Request) {
+    return {
+      user: req.user
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('refresh')
-  refresh(@Request() req: IRequest) {
-    const payload = req.user as Payload
-    return this.authService.refresh(payload.userId)
+  @Get('verify')
+  async verify(@Query() { token }: VerifyDTO) {
+    return {
+      user: await this.service.verify(token)
+    }
   }
 
-  // @Roles(Role.ADMIN)
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Post('admin')
-  // admin() {
-  //   return 'Admin route'
-  // }
-
-  @Post('verify-account')
-  async verifyAccount(@Body() { email, code }: VerifyAccountDTO) {
-    return this.authService.verifyAccount(email, code)
+  @Post('resend-verification')
+  async resendVerify(@Body() { email }: ResendVerificationDTO) {
+    return {
+      user: await this.service.resendVerification(email)
+    }
   }
-
-  @Post('resend-verify-account')
-  async resendVerifyAccount(@Body() { email }: ResendVerifyAccountDTO) {
-    return this.authService.resendVerifyAccount(email)
-  }
-
 }
