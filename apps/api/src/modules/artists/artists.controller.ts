@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDTO } from './dto/create.dto';
 import { Role } from 'generated/prisma/enums';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles/roles.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('artists')
 export class ArtistsController {
@@ -25,10 +26,17 @@ export class ArtistsController {
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @Post()
-  async create(@Body() body: CreateArtistDTO) {
+  async create(
+    @Body() body: CreateArtistDTO,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    if (!image || image.size === 0) 
+      throw new BadRequestException();
+  
     return {
-      artist: await this.service.create(body)
+      artist: await this.service.create(body, image)
     };
   }
 }

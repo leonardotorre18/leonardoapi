@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAlbumDTO } from './dtos/create.dto';
+import { ImagesService } from '../storage/images/images.service';
 
 @Injectable()
 export class AlbumsService {
-  constructor(private readonly repository: PrismaService) { }
+  constructor(
+    private readonly repository: PrismaService,
+    private readonly storage: ImagesService,
+  ) { }
 
   find() {
     return this.repository.album.findMany({
@@ -32,15 +36,17 @@ export class AlbumsService {
     })
   }
 
-  create({ title, artistId }: CreateAlbumDTO) {
+  async create({ title, artistId }: CreateAlbumDTO, file: Express.Multer.File) {
+    const { image, imageKey, thumbnail, thumbnailKey } = await this.storage.upload(file)
+
     return this.repository.album.create({
       data: {
         title,
         artistId,
-        thumbnail: '',
-        thumbnailKey: '',
-        image: '',
-        imageKey: '',
+        image,
+        imageKey,
+        thumbnail,
+        thumbnailKey,
       }
     })
   }

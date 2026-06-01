@@ -11,6 +11,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
+import { StorageModule } from './modules/storage/storage.module';
+import { ImagesService } from './modules/storage/images/images.service';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { MailModule } from './modules/mail/mail.module';
     AlbumsModule,
     ArtistsModule,
     TracksModule,
+    StorageModule,
   ],
+  providers: [ImagesService],
 })
 export class AppModule {}

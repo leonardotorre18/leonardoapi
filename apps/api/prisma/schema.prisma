@@ -30,6 +30,9 @@ model Track {
   artist Artist @relation(fields: [artistId], references: [id])
   artistId String @map("artist_id")
 
+  audio String
+  audioKey String @map("audio_key")
+
   playlists Playlist[]
 
   @@map("tracks")
@@ -62,7 +65,7 @@ model Artist {
 
   image String
   imageKey String @map("image_key")
-  thumbail String
+  thumbnail String
   thumbnailKey String @map("thumbnail_key")
 
   tracks Track[]

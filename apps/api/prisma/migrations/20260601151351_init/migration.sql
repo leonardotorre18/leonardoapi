@@ -36,7 +36,7 @@ CREATE TABLE "artists" (
     "name" TEXT NOT NULL,
     "image" TEXT NOT NULL,
     "image_key" TEXT NOT NULL,
-    "thumbail" TEXT NOT NULL,
+    "thumbnail" TEXT NOT NULL,
     "thumbnail_key" TEXT NOT NULL,
 
     CONSTRAINT "artists_pkey" PRIMARY KEY ("id")

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from 'generated/prisma/enums';
@@ -9,7 +9,7 @@ import { CreateTrackDTO } from './dtos/create.dto';
 
 @Controller('tracks')
 export class TracksController {
-  constructor(private readonly service: TracksService) {}
+  constructor(private readonly service: TracksService) { }
 
   @Get()
   async find() {
@@ -25,22 +25,27 @@ export class TracksController {
     }
   }
 
-  
+
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   @UseInterceptors(FileInterceptor('audio'))
   async create(
     @Body() body: CreateTrackDTO,
-    // @UploadedFile() audio: File
+    @UploadedFile() audio: Express.Multer.File
   ) {
+
+    if (!audio || audio.size === 0)
+      throw new BadRequestException();
+
     return {
       song: await this.service.create(
         body,
-        // audio,
+        audio,
       )
     }
   }
+
 
   // @Roles(Role.ADMIN)
   // @UseGuards(JwtAuthGuard, RolesGuard)
