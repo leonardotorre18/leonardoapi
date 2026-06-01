@@ -6,6 +6,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import type { File } from '../storage/types/file.type';
 
 @Controller('albums')
 export class AlbumsController {
@@ -30,7 +31,7 @@ export class AlbumsController {
   @Post()
   async create(
     @Body() body: CreateAlbumDTO,
-    @UploadedFile() image: Express.Multer.File
+    @UploadedFile() image: File
   ) {
     if (!image || image.size === 0)
       throw new BadRequestException();

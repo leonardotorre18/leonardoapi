@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAlbumDTO } from './dtos/create.dto';
 import { ImagesService } from '../storage/images/images.service';
+import { File } from '../storage/types/file.type';
 
 @Injectable()
 export class AlbumsService {
@@ -36,7 +37,7 @@ export class AlbumsService {
     })
   }
 
-  async create({ title, artistId }: CreateAlbumDTO, file: Express.Multer.File) {
+  async create({ title, artistId }: CreateAlbumDTO, file: File) {
     const { image, imageKey, thumbnail, thumbnailKey } = await this.storage.upload(file)
 
     return this.repository.album.create({

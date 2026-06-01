@@ -6,6 +6,7 @@ import { RolesGuard } from '../auth/guards/roles/roles.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateTrackDTO } from './dtos/create.dto';
+import type { File } from '../storage/types/file.type';
 
 @Controller('tracks')
 export class TracksController {
@@ -32,7 +33,7 @@ export class TracksController {
   @UseInterceptors(FileInterceptor('audio'))
   async create(
     @Body() body: CreateTrackDTO,
-    @UploadedFile() audio: Express.Multer.File
+    @UploadedFile() audio: File
   ) {
 
     if (!audio || audio.size === 0)

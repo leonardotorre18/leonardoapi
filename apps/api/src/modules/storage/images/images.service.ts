@@ -3,6 +3,7 @@ import { ImageUpload } from './types/image-upload.type';
 import { AzureBlobStorageService } from '../azure-blob-storage/azure-blob-storage.service';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
+import { File } from '../types/file.type';
 
 
 @Injectable()
@@ -10,7 +11,7 @@ export class ImagesService {
   private containerName = 'images'
   constructor (private readonly storage: AzureBlobStorageService) {}
 
-  async upload(file: Express.Multer.File): Promise<ImageUpload> {
+  async upload(file: File): Promise<ImageUpload> {
     const [image, thumb] = await Promise.all([
       sharp(file.buffer)
         .resize(1024, 1024, { fit: 'inside', withoutEnlargement: true })
