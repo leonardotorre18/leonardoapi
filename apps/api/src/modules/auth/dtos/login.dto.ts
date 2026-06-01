@@ -1,6 +1,6 @@
 import { Transform } from "class-transformer";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
-import { User } from "generated/prisma/client";
+import { User } from "@prisma/client";
 
 export class LoginDTO implements Pick<User & { password: string }, 'email'> {
   @IsString()

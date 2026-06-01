@@ -1,4 +1,4 @@
-import { Role } from "generated/prisma/client"
+import { Role } from "@prisma/client"
 
 export interface Payload {
   sub: string

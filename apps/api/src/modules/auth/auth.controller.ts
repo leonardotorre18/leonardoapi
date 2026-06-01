@@ -11,10 +11,10 @@ import { ResendVerificationDTO } from './dtos/resend-verification';
 export class AuthController {
   constructor (private readonly service: AuthService) {}
 
-  @Post('register')
-  register (@Body() user: RegisterDTO) {
-    return this.service.register(user)
-  }
+  // @Post('register')
+  // register (@Body() user: RegisterDTO) {
+  //   return this.service.register(user)
+  // }
 
   @Post('login')
   async login(@Body() body: LoginDTO) {
@@ -29,17 +29,17 @@ export class AuthController {
     }
   }
 
-  @Get('verify')
-  async verify(@Query() { token }: VerifyDTO) {
-    return {
-      user: await this.service.verify(token)
-    }
-  }
+  // @Get('verify')
+  // async verify(@Query() { token }: VerifyDTO) {
+  //   return {
+  //     user: await this.service.verify(token)
+  //   }
+  // }
 
-  @Post('resend-verification')
-  async resendVerify(@Body() { email }: ResendVerificationDTO) {
-    return {
-      user: await this.service.resendVerification(email)
-    }
-  }
+  // @Post('resend-verification')
+  // async resendVerify(@Body() { email }: ResendVerificationDTO) {
+  //   return {
+  //     user: await this.service.resendVerification(email)
+  //   }
+  // }
 }

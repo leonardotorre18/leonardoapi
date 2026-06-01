@@ -9,6 +9,8 @@ CREATE TABLE "tracks" (
     "title" TEXT NOT NULL,
     "album_id" TEXT NOT NULL,
     "artist_id" TEXT NOT NULL,
+    "audio" TEXT NOT NULL,
+    "audio_key" TEXT NOT NULL,
 
     CONSTRAINT "tracks_pkey" PRIMARY KEY ("id")
 );

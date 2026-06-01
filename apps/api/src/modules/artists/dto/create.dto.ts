@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from "class-validator";
-import { Artist } from "generated/prisma/client";
+import { Artist } from "@prisma/client";
 
 export class CreateArtistDTO implements Pick<Artist, 'name'>{
   @IsString()

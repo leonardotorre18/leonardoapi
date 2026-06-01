@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTrackDTO } from './dtos/create.dto';
 import { AudiosService } from '../storage/audios/audios.service';
@@ -23,14 +23,19 @@ export class TracksService {
     })
   }
 
-  async create({ title, albumId, artistId }: CreateTrackDTO, file: File) {
+  async create({ title, albumId }: CreateTrackDTO, file: File) {
     const { audio, audioKey } = await this.storage.upload(file)
-    
+    const album = await this.repository.album.findUnique({ where: { id: albumId } })
+
+    if (!album)
+      throw new NotFoundException()
+
+
     return this.repository.track.create({
       data: {
         title,
-        artistId,
         albumId,
+        artistId: album.artistId,
         audioKey,
         audio,
       }

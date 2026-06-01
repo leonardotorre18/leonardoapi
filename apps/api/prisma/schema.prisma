@@ -4,9 +4,10 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-  moduleFormat = "cjs"
+  provider = "prisma-client-js"
+  //   output   = "../generated/prisma"
+  //   moduleFormat = "cjs"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
@@ -19,18 +20,18 @@ enum Role {
 }
 
 model Track {
-  id String @id @default(ulid())
+  id        String   @id @default(ulid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  title String
+  title     String
 
-  album Album @relation(fields: [albumId], references: [id])
+  album   Album  @relation(fields: [albumId], references: [id])
   albumId String @map("album_id")
 
-  artist Artist @relation(fields: [artistId], references: [id])
+  artist   Artist @relation(fields: [artistId], references: [id])
   artistId String @map("artist_id")
 
-  audio String
+  audio    String
   audioKey String @map("audio_key")
 
   playlists Playlist[]
@@ -39,33 +40,33 @@ model Track {
 }
 
 model Album {
-  id String @id @default(ulid())
+  id        String   @id @default(ulid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  title String
+  title     String
 
-  image String
-  imageKey String @map("image_key")
-  thumbnail String
+  image        String
+  imageKey     String @map("image_key")
+  thumbnail    String
   thumbnailKey String @map("thumbnail_key")
 
-  artist Artist @relation(fields: [artistId], references: [id])
+  artist   Artist @relation(fields: [artistId], references: [id])
   artistId String @map("artist_id")
-  
+
   tracks Track[]
 
   @@map("albums")
 }
 
 model Artist {
-  id String @id @default(ulid())
+  id        String   @id @default(ulid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  name String
+  name      String
 
-  image String
-  imageKey String @map("image_key")
-  thumbnail String
+  image        String
+  imageKey     String @map("image_key")
+  thumbnail    String
   thumbnailKey String @map("thumbnail_key")
 
   tracks Track[]
@@ -75,20 +76,20 @@ model Artist {
 }
 
 model User {
-  id String @id @default(ulid())
+  id        String   @id @default(ulid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email String @unique
-  name String
+  email        String @unique
+  name         String
   passwordHash String @map("password_hash")
 
-  isVerified Boolean @default(false) @map("is_verified")
-  verificationToken String? @map("verification_token")
-  tokenExpires DateTime? @map("token_expires")
+  isVerified        Boolean   @default(false) @map("is_verified")
+  verificationToken String?   @map("verification_token")
+  tokenExpires      DateTime? @map("token_expires")
 
   codes Code[]
-  role Role[] @default([USER])
+  role  Role[] @default([USER])
 
   playlists Playlist[]
 
@@ -96,29 +97,29 @@ model User {
 }
 
 model Code {
-  id String @id @default(ulid())
+  id        String   @id @default(ulid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   codeHash String @map("code_hash")
 
   userId String @map("user_id")
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   attempts Int
-  purpose String
+  purpose  String
 
   @@map("codes")
 }
 
 model Playlist {
-  id String @id @default(ulid())
+  id        String   @id @default(ulid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   tracks Track[]
 
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @map("user_id")
 
   @@map("playlists")

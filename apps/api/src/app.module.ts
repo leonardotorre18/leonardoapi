@@ -12,7 +12,7 @@ import { MailModule } from './modules/mail/mail.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
 import { StorageModule } from './modules/storage/storage.module';
-import { ImagesService } from './modules/storage/images/images.service';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -38,6 +38,7 @@ import { ImagesService } from './modules/storage/images/images.service';
     TracksModule,
     StorageModule,
   ],
-  providers: [ImagesService],
+  providers: [],
+  controllers: [AppController],
 })
 export class AppModule {}

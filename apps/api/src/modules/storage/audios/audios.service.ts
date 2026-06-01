@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { AzureBlobStorageService } from '../azure-blob-storage/azure-blob-storage.service';
-import { v4 as uuidv4 } from 'uuid';
+// import { AzureBlobStorageService } from '../azure-blob-storage/azure-blob-storage.service';
 import { File } from '../types/file.type';
+import { VercelBlobStorageService } from '../vercel-blob-storage/vercel-blob-storage.service';
 
 @Injectable()
 export class AudiosService {
   private containerName = 'audios'
-  constructor(private readonly storage: AzureBlobStorageService) { }
+  constructor(private readonly storage: VercelBlobStorageService) { }
 
   async upload(file: File) {
-    const id = uuidv4();
+    const id = crypto.randomUUID();
     const audioKey = `${id}.webm`
     const mimetype = 'audio/webm';
 
