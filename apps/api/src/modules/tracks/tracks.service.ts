@@ -9,7 +9,7 @@ export class TracksService {
   constructor(
     private repository: PrismaService,
     private storage: AudiosService,
-  ) {}
+  ) { }
 
   find() {
     return this.repository.track.findMany({})
@@ -40,5 +40,16 @@ export class TracksService {
         audio,
       }
     })
+  }
+
+  async delete(id: string) {
+    const track = await this.repository.track.findUnique({ where: { id } })
+  
+    if (!track)
+      throw new NotFoundException()
+  
+    await this.storage.delete(track.audioKey)
+  
+    return this.repository.track.delete({ where: { id } })
   }
 }

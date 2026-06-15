@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { RegisterDTO } from './dtos/register.dto';
 import { LoginDTO } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -8,6 +8,7 @@ import { Payload } from './types/payload.type';
 import { Auth } from './types/auth.type';
 import bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -15,9 +16,27 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
     private readonly repository: PrismaService,
+    private readonly configService: ConfigService,
   ) { }
 
   async register({ email, name, password }: RegisterDTO) {
+
+    const existingUser = await this.repository.user.findUnique({
+      where: { email }
+    })
+
+    if (existingUser) {
+      if (existingUser.isVerified) 
+        throw new ConflictException()
+
+      if (existingUser.tokenExpires) {
+        if (existingUser.tokenExpires < new Date())
+          await this.repository.user.delete({ where: { email } })
+        else
+          throw new ConflictException()
+      }
+    }
+
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const tokenExpires = new Date();
     tokenExpires.setMinutes(tokenExpires.getMinutes() + 15);
@@ -38,17 +57,18 @@ export class AuthService {
       },
     })
 
+    const verificationLink: string = `${this.configService.getOrThrow('domain')}/api/auth/verify?token=${verificationToken}`
+
     await this.mailService.send({
       to: email,
       subject: 'Verificación de cuenta para ' + email,
       body: `
-        Para verificar tu cuenta has <a href="http://localhost:3000/api/auth/verify?token=${verificationToken}">click en este enlace</a><br>
+        Para verificar tu cuenta has <a href="${verificationLink}">click en este enlace</a><br>
         Este enlace vence en 15min
       `
     })
 
     return user
-
   }
 
   async login({ email, password }: LoginDTO): Promise<Auth> {
@@ -85,7 +105,6 @@ export class AuthService {
 
     if (!user.tokenExpires || user.tokenExpires < new Date()) {
       throw new BadRequestException();
-      
     }
 
     await this.repository.user.update({

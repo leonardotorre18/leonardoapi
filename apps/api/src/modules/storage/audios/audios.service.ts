@@ -22,4 +22,8 @@ export class AudiosService {
     }
 
   }
+
+  async delete (key: string) {
+    this.storage.delete(key)
+  }
 }

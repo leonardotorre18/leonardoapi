@@ -29,6 +29,9 @@ import { AppController } from './app.controller';
         jwtEnv,
         smtpEnv,
         azureEnv,
+        () => ({
+          domain: process.env.DOMAIN || 'http://localhost:3000',
+        })
       ],
     }),
     AuthModule,

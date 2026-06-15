@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles/roles.guard';
@@ -35,7 +35,6 @@ export class TracksController {
     @Body() body: CreateTrackDTO,
     @UploadedFile() audio: File
   ) {
-
     if (!audio || audio.size === 0)
       throw new BadRequestException();
 
@@ -48,13 +47,12 @@ export class TracksController {
   }
 
 
-  // @Roles(Role.ADMIN)
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Delete('/:id')
-  // async delete(@Param('id') id: string) {
-
-  //   return {
-  //     song: await this.songsService.delete(id)
-  //   };
-  // }
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete('/:id')
+  async delete(@Param('id') id: string) {
+    return {
+      track: await this.service.delete(id)
+    };
+  }
 }
