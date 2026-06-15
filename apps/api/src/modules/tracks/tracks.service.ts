@@ -12,14 +12,23 @@ export class TracksService {
   ) { }
 
   find() {
-    return this.repository.track.findMany({})
+    return this.repository.track.findMany({
+      include: {
+        artist: true,
+        album: true,
+      },
+    })
   }
 
   findById(id: string) {
     return this.repository.track.findUniqueOrThrow({
       where: {
         id
-      }
+      },
+      include: {
+        artist: true,
+        album: true,
+      },
     })
   }
 
