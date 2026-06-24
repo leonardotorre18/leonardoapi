@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateArtistDTO } from './dto/create.dto';
 import { ImagesService } from '../storage/images/images.service';
 import { File } from '../storage/types/file.type';
 import { UpdateArtistDTO } from './dto/update.dto';
+import { AlbumsService } from '../albums/albums.service';
 
 @Injectable()
 export class ArtistsService {
   constructor(
     private readonly repository: PrismaService,
     private readonly storage: ImagesService,
+    private readonly albumsService: AlbumsService,
   ) { }
 
   find() {
@@ -68,5 +70,22 @@ export class ArtistsService {
     }
 
     return artist
+  }
+
+  async delete(id: string) {
+    const artist = await this.repository.artist.findUnique({ 
+      where: { id },
+      include: {
+        albums: true
+      }
+    })
+
+    if (!artist) throw new NotFoundException()
+    
+    await Promise.all(artist.albums.map(album =>
+      this.albumsService.delete(album.id)
+    ))
+
+    return this.repository.album.delete({ where: { id } })
   }
 }

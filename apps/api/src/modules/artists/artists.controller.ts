@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDTO } from './dto/create.dto';
 import { Role } from '@prisma/client';
@@ -34,16 +34,16 @@ export class ArtistsController {
     @Body() body: CreateArtistDTO,
     @UploadedFile() image: File
   ) {
-    if (!image || image.size === 0) 
+    if (!image || image.size === 0)
       throw new BadRequestException();
-  
+
     return {
       artist: await this.service.create(body, image)
     };
   }
 
   @Roles(Role.ADMIN)
-  // @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('image'))
   @Patch(':id')
   async update(
@@ -53,6 +53,15 @@ export class ArtistsController {
   ) {
     return {
       artist: await this.service.update(id, body, image)
+    }
+  }
+
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return {
+      artist: await this.service.delete(id)
     }
   }
 }
