@@ -11,7 +11,7 @@ export class VercelBlobStorageService {
       throw new InternalServerErrorException(err);
     }
   }
-  public async delete (key: string) {
+  public async delete (key: string, containerName: string) {
     try {
       return await del(key);
     } catch (err) {

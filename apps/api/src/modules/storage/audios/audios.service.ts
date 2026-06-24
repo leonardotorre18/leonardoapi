@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-// import { AzureBlobStorageService } from '../azure-blob-storage/azure-blob-storage.service';
+import { AzureBlobStorageService } from '../azure-blob-storage/azure-blob-storage.service';
 import { File } from '../types/file.type';
 import { VercelBlobStorageService } from '../vercel-blob-storage/vercel-blob-storage.service';
 
 @Injectable()
 export class AudiosService {
   private containerName = 'audios'
-  constructor(private readonly storage: VercelBlobStorageService) { }
+  constructor(private readonly storage: AzureBlobStorageService) { }
 
   async upload(file: File) {
     const id = crypto.randomUUID();
@@ -24,6 +24,6 @@ export class AudiosService {
   }
 
   async delete (key: string) {
-    this.storage.delete(key)
+    await this.storage.delete(key, this.containerName)
   }
 }

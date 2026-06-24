@@ -25,6 +25,8 @@ export class AlbumsController {
     };
   }
 
+  
+
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('image'))

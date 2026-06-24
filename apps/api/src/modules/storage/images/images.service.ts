@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ImageUpload } from './types/image-upload.type';
-// import { AzureBlobStorageService } from '../azure-blob-storage/azure-blob-storage.service';
+import { AzureBlobStorageService } from '../azure-blob-storage/azure-blob-storage.service';
 import sharp from 'sharp';
-// import { v4 as uuidv4 } from 'uuid';
 import { File } from '../types/file.type';
-import { VercelBlobStorageService } from '../vercel-blob-storage/vercel-blob-storage.service';
+// import { VercelBlobStorageService } from '../vercel-blob-storage/vercel-blob-storage.service';
 
 
 @Injectable()
 export class ImagesService {
   private containerName = 'images'
-  constructor (private readonly storage: VercelBlobStorageService) {}
+  constructor (private readonly storage: AzureBlobStorageService) {}
 
   async upload(file: File): Promise<ImageUpload> {
     const [image, thumb] = await Promise.all([
@@ -44,6 +43,10 @@ export class ImagesService {
       height: image.info.height,
       fileSizeBytes: image.info.size
     }
+  }
+
+  delete(key: string) {
+    this.storage.delete(key, this.containerName)
   }
   
 }

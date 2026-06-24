@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateArtistDTO } from './dto/create.dto';
 import { ImagesService } from '../storage/images/images.service';
 import { File } from '../storage/types/file.type';
+import { UpdateArtistDTO } from './dto/update.dto';
 
 @Injectable()
 export class ArtistsService {
@@ -35,5 +36,37 @@ export class ArtistsService {
         thumbnailKey,
       }
     })
+  }
+
+  async update(id: string, body: UpdateArtistDTO, file?: File) {
+    let artist = await this.repository.artist.update({
+      where: {
+        id
+      },
+      data: {
+        ...body
+      }
+    })
+    
+    if (file) {
+      this.storage.delete(artist.imageKey)
+      const {
+        image,
+        imageKey,
+        thumbnail,
+        thumbnailKey,
+      } = await this.storage.upload(file)
+      artist = await this.repository.artist.update({
+        where: { id },
+        data: {
+          image,
+          imageKey,
+          thumbnail,
+          thumbnailKey,
+        }
+      })
+    }
+
+    return artist
   }
 }
