@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles/roles.guard';
@@ -7,6 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateTrackDTO } from './dtos/create.dto';
 import type { File } from '../storage/types/file.type';
 import { Role } from '@prisma/client';
+import { UpdateTrackDTO } from './dtos/update.dto';
 
 @Controller('tracks')
 export class TracksController {
@@ -25,7 +26,6 @@ export class TracksController {
       tracks: await this.service.findById(id)
     }
   }
-
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -46,6 +46,19 @@ export class TracksController {
     }
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() body: UpdateTrackDTO,
+    @UploadedFile() image: File,
+  ) {
+    return {
+      track: await this.service.update(id, body, image)
+    }
+  }
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
