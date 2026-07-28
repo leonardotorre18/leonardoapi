@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ImagesService } from './images/images.service';
 import { AudiosService } from './audios/audios.service';
-import { AzureBlobStorageService } from './azure-blob-storage/azure-blob-storage.service';
+// import { AzureBlobStorageService } from './azure-blob-storage/azure-blob-storage.service';
 import { ConfigModule } from '@nestjs/config';
 import { VercelBlobStorageService } from './vercel-blob-storage/vercel-blob-storage.service';
 
@@ -13,7 +13,7 @@ import { VercelBlobStorageService } from './vercel-blob-storage/vercel-blob-stor
   providers: [
     AudiosService,
     ImagesService, 
-    AzureBlobStorageService,
+    // AzureBlobStorageService,
     VercelBlobStorageService,
   ],
   imports: [ConfigModule,],

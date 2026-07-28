@@ -7,6 +7,7 @@ import { StorageModule } from '../storage/storage.module';
 @Module({
   providers: [TracksService],
   controllers: [TracksController],
+  exports: [TracksService],
   imports: [PrismaModule, StorageModule,],
 })
 export class TracksModule {}

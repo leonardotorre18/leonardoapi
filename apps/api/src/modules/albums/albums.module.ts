@@ -3,11 +3,12 @@ import { AlbumsService } from './albums.service';
 import { AlbumsController } from './albums.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { StorageModule } from '../storage/storage.module';
-import { TracksService } from '../tracks/tracks.service';
+import { TracksModule } from '../tracks/tracks.module';
 
 @Module({
-  imports: [PrismaModule, StorageModule,],
-  providers: [AlbumsService, TracksService],
+  imports: [PrismaModule, StorageModule, TracksModule],
+  providers: [AlbumsService],
+  exports: [AlbumsService],
   controllers: [AlbumsController],
 })
 export class AlbumsModule { }

@@ -3,11 +3,11 @@ import { ArtistsService } from './artists.service';
 import { ArtistsController } from './artists.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { StorageModule } from '../storage/storage.module';
-import { AlbumsService } from '../albums/albums.service';
+import { AlbumsModule } from '../albums/albums.module';
 
 @Module({
-  providers: [ArtistsService, AlbumsService],
+  providers: [ArtistsService],
   controllers: [ArtistsController],
-  imports: [PrismaModule, StorageModule,],
+  imports: [PrismaModule, StorageModule, AlbumsModule],
 })
 export class ArtistsModule {}
