@@ -21,9 +21,7 @@ export class ArtistsController {
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return {
-      artist: await this.service.findById(id)
-    };
+    return  this.service.findById(id)
   }
 
   @Roles(Role.ADMIN)
@@ -37,9 +35,7 @@ export class ArtistsController {
     if (!image || image.size === 0)
       throw new BadRequestException();
 
-    return {
-      artist: await this.service.create(body, image)
-    };
+    return  this.service.create(body, image)
   }
 
   @Roles(Role.ADMIN)
@@ -51,17 +47,14 @@ export class ArtistsController {
     @Body() body: UpdateArtistDTO,
     @UploadedFile() image: File,
   ) {
-    return {
-      artist: await this.service.update(id, body, image)
-    }
+    return  this.service.update(id, body, image)
+
   }
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return {
-      artist: await this.service.delete(id)
-    }
+    return  this.service.delete(id)
   }
 }

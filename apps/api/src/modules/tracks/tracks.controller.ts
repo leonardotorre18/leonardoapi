@@ -22,9 +22,7 @@ export class TracksController {
 
   @Get('/:id')
   async findById(@Param('id') id: string) {
-    return {
-      tracks: await this.service.findById(id)
-    }
+    return this.service.findById(id)
   }
 
   @Roles(Role.ADMIN)
@@ -38,12 +36,11 @@ export class TracksController {
     if (!audio || audio.size === 0)
       throw new BadRequestException();
 
-    return {
-      track: await this.service.create(
+    return this.service.create(
         body,
         audio,
       )
-    }
+
   }
 
   @Roles(Role.ADMIN)
@@ -55,17 +52,14 @@ export class TracksController {
     @Body() body: UpdateTrackDTO,
     @UploadedFile() image: File,
   ) {
-    return {
-      track: await this.service.update(id, body, image)
-    }
+    return  this.service.update(id, body, image)
+
   }
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('/:id')
   async delete(@Param('id') id: string) {
-    return {
-      track: await this.service.delete(id)
-    };
+    return  this.service.delete(id)
   }
 }

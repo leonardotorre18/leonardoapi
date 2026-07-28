@@ -21,9 +21,8 @@ export class AlbumsController {
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return {
-      album: await this.service.findById(id)
-    };
+    return  this.service.findById(id)
+
   }
 
 
@@ -39,9 +38,7 @@ export class AlbumsController {
     if (!image || image.size === 0)
       throw new BadRequestException();
 
-    return {
-      album: await this.service.create(body, image)
-    }
+    return  this.service.create(body, image)
   }
 
   @Roles(Role.ADMIN)
@@ -62,8 +59,6 @@ export class AlbumsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return {
-      album: await this.service.delete(id)
-    }
+    return  this.service.delete(id)
   }
 }
